@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-      <v-content>
+      <v-content class="page">
         <v-container fluid
                      fill-height
                      grid-list-lg>
@@ -95,24 +95,24 @@ export default {
 </script>
 
 <style>
-  .editor-container {
-    position: relative;
-  }
+.editor-container {
+  position: relative;
+}
 
-  .editor-wrap {
-    position: relative;
-    height: 100%;
-  }
+.editor-wrap {
+  position: relative;
+  height: 100%;
+}
 
-  .editor-transform {
-    margin-bottom: 1em;
-  }
+.editor-transform {
+  margin-bottom: 0.5em;
+}
 
-  .editor {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-  }
+.editor {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
 </style>

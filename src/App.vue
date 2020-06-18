@@ -26,6 +26,16 @@
                        @click="transformCodeToTree">
                   <v-icon>subdirectory_arrow_right</v-icon>
                 </v-btn>
+                <v-btn fab
+                       small
+                       bottom
+                       right
+                       absolute
+                       color="primary"
+                       class="editor-transform editor-ae"
+                       @click="transformCodeToAEAPI">
+                  AE API
+                </v-btn>
               </div>
             </v-flex>
             <v-flex xs12
@@ -90,6 +100,22 @@ export default {
     transformTreeToCode() {
       this.codeValue = clone(this.treeJSON);
     },
+    transformCodeToAEAPI() {
+      let productDTO;
+      if (this.codeJSON instanceof Array) {
+        productDTO = this.codeJSON[0].productDTO;
+      } else {
+        productDTO = this.codeJSON.productDTO;
+      }
+
+      if (productDTO == null) {
+        return;
+      }
+      productDTO.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEProductDTO';
+      if (productDTO.skuList != null) {
+      
+      }
+    },
   },
 };
 </script>
@@ -106,6 +132,10 @@ export default {
 
 .editor-transform {
   margin-bottom: 0.5em;
+}
+
+.editor-ae {
+  margin-right: 5em;
 }
 
 .editor {

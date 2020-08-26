@@ -82,7 +82,7 @@ export default {
         modes: null,
       },
       optionsTree: {
-        mode: 'tree',
+        mode: 'code',
         modes: null,
       },
     };
@@ -101,20 +101,110 @@ export default {
       this.codeValue = clone(this.treeJSON);
     },
     transformCodeToAEAPI() {
+      let publishRequestDTO;
       let productDTO;
       if (this.codeJSON instanceof Array) {
-        productDTO = this.codeJSON[0].productDTO;
+        publishRequestDTO = this.codeJSON[0];
+        publishRequestDTO.class = 'com.alibaba.global.gpf.common.domain.request.PublishRequestDTO';
+        productDTO = publishRequestDTO.productDTO;
+        productDTO.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEProductDTO';
+        const skuList = productDTO.skuList;
+        if (skuList instanceof Array) {
+          for (const skuIndex in skuList) {
+            const sku = skuList[skuIndex];
+
+            sku.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AESkuDTO';
+            const salePropertyPairList = sku.salePropertyPairList;
+            if (salePropertyPairList !== undefined && salePropertyPairList.length > 0) {
+              for (const salePropertyPairIndex in salePropertyPairList) {
+                const salePropertyPair = salePropertyPairList[salePropertyPairIndex];
+
+                salePropertyPair.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEPropPairDTO';
+                const propValueList = salePropertyPair.propValueList;
+                if (propValueList !== undefined && propValueList.length > 0) {
+                  for (const propValueIndex in propValueList) {
+                    let propValue = propValueList[propValueIndex];
+
+                    propValue.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEPropValueDTO';
+                  }
+                }
+              }
+            }
+            debugger
+            const nationalPrices = sku.nationalPrices;
+            debugger
+            if (nationalPrices != undefined && nationalPrices.length > 0) {
+              debugger
+              for (const nationalPriceIndex in nationalPrices) {
+                let nationalPrice = nationalPrices[nationalPriceIndex];
+                nationalPrice.class = 'com.alibaba.global.gpf.common.ae.domain.dto.NationalPriceDTO';
+              }
+            }
+            debugger
+
+          }
+        }
+        const extDTO=productDTO.extDTO;
+        if (extDTO != undefined ) {
+
+          extDTO.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEExtDTO';
+        }
+        const mediaDTO = productDTO.mediaDTO;
+        if (mediaDTO != undefined) {
+
+          mediaDTO.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEMediaDTO';
+        }
+        const packageDTO = productDTO.packageDTO;
+        if (packageDTO != undefined) {
+
+          packageDTO.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEPackageDTO';
+        }
+        const productInfoDTO = productDTO.productInfoDTO;
+        if (productInfoDTO != undefined) {
+
+          productInfoDTO.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEProductInfoDTO';
+        }
+        const descriptionDTO = productDTO.descriptionDTO;
+        if (descriptionDTO != undefined) {
+
+          descriptionDTO.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEDescriptionDTO';
+          let descriptionMap = descriptionDTO.descriptionMap;
+          for (const i in descriptionMap) {
+            let desVal = descriptionMap[i];
+
+            desVal.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEDescription';
+          }
+
+        }
+        const freightDTO = productDTO.freightDTO;
+        if (freightDTO != undefined) {
+          freightDTO.class = 'com.alibaba.global.gpf.common.ae.domain.dto.FreightDTO';
+        }
+        const userDTO = productDTO.userDTO;
+        if (userDTO != undefined) {
+          userDTO.class = 'com.alibaba.global.gpf.common.domain.request.BaseUserDTO';
+        }
+        let propertyPairList = productDTO.propertyPairList;
+        if (propertyPairList != undefined && propertyPairList.length > 0) {
+          for (const propertyPairIndex in propertyPairList) {
+            let propertyPair = propertyPairList[propertyPairIndex];
+            propertyPair.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEPropPairDTO';
+            let propValueList = propertyPair.propValueList;
+            if (propValueList != undefined && propValueList.length > 0) {
+              for (const propValueIndex in propValueList) {
+                const propValue = propValueList[propValueIndex];
+                propValue.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEPropValueDTO';
+              }
+            }
+          }
+        }
+
+        debugger;
       } else {
         productDTO = this.codeJSON.productDTO;
       }
-
-      if (productDTO == null) {
-        return;
-      }
-      productDTO.class = 'com.alibaba.global.gpf.common.ae.domain.dto.AEProductDTO';
-      if (productDTO.skuList != null) {
-      
-      }
+      this.transformCodeToTree();
+      return productDTO;
     },
   },
 };
